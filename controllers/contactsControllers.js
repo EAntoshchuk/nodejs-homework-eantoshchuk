@@ -49,11 +49,21 @@ export const updateContact = async (req, res) => {
     req.json(result);
   };
 
+  export const updateStatusContact = async (req, res) => {
+    const { contactId } = req.params;
+    const updatedContact = await Contact.findByIdAndUpdate(contactId, req.body, { new: true });
+    if (!updatedContact) {
+      throw HttpErrorCreator(404, "Not Found");
+    }
+    res.json(updatedContact);
+  };
+
   export default {
     getAllContacts: contactDecorator(getAllContacts),
     getContactById: contactDecorator(getContactById),
     addNewContact: contactDecorator(addNewContact),
     deleteContact: contactDecorator(deleteContact),
     updateContact: contactDecorator(updateContact),
+    updateStatusContact: contactDecorator(updateStatusContact),
   };
   

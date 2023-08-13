@@ -1,6 +1,6 @@
 import Joi from "joi";
 
-const contactAddSchema = Joi.object({
+const contactSchema = Joi.object({
   name: Joi.string().required().messages({
     "any.required": `add "name" please`,
   }),
@@ -10,4 +10,8 @@ const contactAddSchema = Joi.object({
   }),
 });
 
-export default contactAddSchema;
+const contactFavouriteSchema = Joi.object({
+  favourite: Joi.boolean().required().messages({"any.required": `missing required "favourite" field`})
+});
+
+export default {contactSchema, contactFavouriteSchema};
