@@ -11,7 +11,9 @@ const hashPassword = async(password) => {
   const compareResult1 = await bcrypt.compare(password, result);
   const compareResult2 = await bcrypt.compare("123456", result);
 }
-hashPassword("123456")
+hashPassword("123456");
+
+
 
 const app = express();
 
