@@ -4,6 +4,8 @@ import cors from "cors";
 import authRouter from "./routes/api/auth-router.js";
 import contactsRouter from "./routes/api/contacts-router.js";
 import bcrypt from "bcryptjs";
+import "dotenv/config";
+import jwt from "jsonwebtoken";
 
 const hashPassword = async(password) => {
   const salt = await bcrypt.genSalt(10);
@@ -13,8 +15,19 @@ const hashPassword = async(password) => {
 }
 hashPassword("123456");
 
+const {JWT_SECRET} = process.env;
+const payload = {
+  id: ""
+}
 
+const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "23h"});
+const decodeToken = jwt.decode(token);
+try {
+const {id} = jwt.verify(token, JWT_SECRET);
+}
+catch(error) {
 
+}
 const app = express();
 
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
