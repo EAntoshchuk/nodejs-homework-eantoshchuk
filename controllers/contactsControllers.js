@@ -1,9 +1,13 @@
 import contactsService from "../models/contacts.js";
 import { HttpError, contactDecorator } from "../helpers/index.js";
 import contactAddSchema from "../schemas/contactSchema.js";
+import { query } from "express";
 
 export const getAllContacts = async (req, res) => {
-    const result = await contactsService.listContacts();
+    const {_id: owner} = req.user;
+    const {page = 1, limit = 10, ...query} = req.query;
+    const skip = (page -1) * limit;
+    const result = await contactsService.listContacts({owner, ...query}, {skip, limit}).populate("owner", "name email");
     res.json(result);
   };
 
@@ -21,7 +25,8 @@ export const addNewContact = async (req, res) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = await contactsService.addContact(req.body);
+    const {_id: owner} = req.user;
+    const result = await contactsService.addContact({...req.body, owner});
     res.status(201).json(result);
   };
 

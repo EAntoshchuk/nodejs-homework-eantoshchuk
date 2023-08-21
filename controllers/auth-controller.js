@@ -21,7 +21,7 @@ res.status(201).json({
 })
 }
 
-const singin = async(req, res) => {
+const signin = async(req, res) => {
 const {email, password} = req.body;
 const user = await User.findOne({email});
 if(!user) {
@@ -35,12 +35,35 @@ if(!passwordCompare) {
 const payload = {
     is: user.id,
 }
+
 const token = jwt.sign(payload, JWT_SECRET, {expiresIn: "23h"});
+await User.findByIdAndUpdate(user._id, {token});
+
 res.json({
     token,
 })
 }
+
+const getCurrent = (req, res) => {
+const {name, email} = req.user;
+res.json({
+    name,
+    email,
+})
+}
+
+const signout = async(req, res) => {
+    const {_id} = req.user;
+    await User.findByIdAndUpdate(_id, {token: ""});
+
+    res.json({
+        message: "Signout successful"
+    })
+}
+
 export default{
     signup: ctrlWrapper(signup),
-    singin: ctrlWrapper(singin),
+    signin: ctrlWrapper(signin),
+    getCurrent: ctrlWrapper(getCurrent),
+    signout: ctrlWrapper(signout),
 }

@@ -18,6 +18,9 @@ password: {
     required: true,
     minlength: 6,
 },
+token: {
+    type: String,
+}
 }, {versionKey: false, timestamps: true});
 
 userSchema.pre("findOneAndUpdate", handleUpdateValidate);
